@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "208342776230",
+    "project_id": "anixii-project",
+    "storage_bucket": "anixii-project.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:208342776230:android:905a409a523eef50f97767",
+        "android_client_info": {
+          "package_name": "com.example.anixii_health"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDr-9xMQjTBMKOQ-G5yCrWDLNo2qTK3olA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
