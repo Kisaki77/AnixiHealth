@@ -1,10 +1,13 @@
 import 'dart:io';
 
-import 'package:anixii_health/pages/login.dart';
-import 'package:anixii_health/pages/newfeed.dart';
-import 'package:anixii_health/pages/screen.dart';
+import 'package:health_anixi/State/loginState.dart';
+import 'package:health_anixi/pages/login.dart';
+import 'package:health_anixi/pages/newfeed.dart';
+import 'package:health_anixi/pages/screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:health_anixi/pages/signup_two.dart';
+import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -52,7 +55,7 @@ class MyApp extends StatelessWidget {
       home: const MyScreen(),
       routes: {
         '/login': (context) => myLogin(),
-        '/home': (context) => MyHomePage(),
+        '/home': (context) => NewsFeedPage(),
       },
     );
   }

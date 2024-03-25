@@ -1,8 +1,14 @@
-import 'package:anixii_health/firebase_auth/firebase_auth_services.dart';
+
+import 'package:health_anixi/State/loginState.dart';
+import 'package:health_anixi/firebase_auth/firebase_auth_services.dart';
+import 'package:health_anixi/pages/login.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:health_anixi/pages/signup_two.dart';
+import 'package:provider/provider.dart';
+import 'package:health_anixi/State/signupState.dart';
 
-class MySignUp extends StatefulWidget {  
+class MySignUp extends StatefulWidget {
   const MySignUp({Key? key}) : super(key: key);
 
 
@@ -10,170 +16,364 @@ class MySignUp extends StatefulWidget {
   State<MySignUp> createState() => _MySignUpState();
 }
 
-  class _MySignUpState extends State<MySignUp> {
-    final FirebaseAuthService _auth = FirebaseAuthService();
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
+class _MySignUpState extends State<MySignUp> {
+  // final FirebaseAuthService _auth = FirebaseAuthService();
+  // final TextEditingController _emailController = TextEditingController();
+  // final TextEditingController _passwordController = TextEditingController();
+  // final TextEditingController  _fnameController = TextEditingController();
+  // final TextEditingController  _lnameController = TextEditingController();
 
-   @override
-  void dispose() {
-    
-    _emailController.dispose();
-    _passwordController.dispose();
-    super.dispose();
-  }
-     
+
+  // @override
+  // void dispose() {
+  //
+  //   _emailController.dispose();
+  //   _passwordController.dispose();
+  //   _fnameController.dispose();
+  //   _lnameController.dispose();
+  //
+  //   super.dispose();
+  // }
+
   // Get auth service
-  
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        body: Stack(
-          children: [
-            Container(
-              color: const Color.fromARGB(255, 74, 95, 86), 
-              width: double.infinity, 
-              height: double.infinity, 
-            ),
-              Align(
-            alignment: Alignment.center,
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
+    final signupState_v = Provider.of<signupState>(context);
+
+    return Form(
+        key: signupState_v.formKey,
+        child: Scaffold(
+            body: Stack(
                 children: [
-                  // Logo Image (scrollable)
-                  SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Image.asset(
-                            'assets/images/logo.webp', 
-                            width: 300,
-                            height: 300,
-                          ),
+
+                  Container(
+                    color: const Color(0xff4D6159), // Set background color here
+                    width: double.infinity,
+                    height: double.infinity,
+                  ),
+                  const Align(
+                      alignment: Alignment.topCenter,
+                      child: FractionalTranslation(
+                        translation: Offset(0.0, -0.1),
+                        child: Image(
+                          height: 400,
+                          width: 500,
+                          image: AssetImage('assets/images/Anixihealth.png'),
+
                         ),
-                      
-                      ],
+                      )
+                  ),
+
+                  const SizedBox(height: 100,),
+                  Align(
+                      alignment: Alignment.center,
+                      child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            const SizedBox(height: 150,),
+                            Padding(
+                              padding: const EdgeInsets.all(10.0),
+                              child: Container(
+                                  width: 300,
+                                  height: 50,
+                                  child: TextFormField(
+                                    controller: signupState_v.name,
+                                    validator: (name) {
+                                      return signupState_v.validateName(name!);
+                                    },
+                                    decoration: const InputDecoration(
+                                      hintText: 'First Name',
+                                      hintStyle: TextStyle(color: Colors.white),
+                                      enabledBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: Colors.white,
+
+                                        ),
+                                      ),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: Colors.white,
+                                          width: 2.0,
+                                        ),
+                                      ),
+                                    ),
+                                    style: const TextStyle(
+                                        color: Colors.white),)
+                              ),
+                            ),
+
+                            const SizedBox(height: 10,),
+
+
+                            Padding(
+                              padding: const EdgeInsets.all(10.0),
+                              child: Container(
+                                  width: 300,
+                                  height: 50,
+                                  child: TextFormField(
+                                    controller: signupState_v.surname,
+                                    validator: (surname) {
+                                      return signupState_v.validateSurname(
+                                          surname!);
+                                    },
+                                    decoration: const InputDecoration(
+                                      hintText: 'Last Name',
+                                      hintStyle: TextStyle(color: Colors.white),
+                                      enabledBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: Colors.white,
+
+                                        ),
+                                      ),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: Colors.white,
+                                          width: 2.0,
+                                        ),
+                                      ),
+                                    ),
+                                    style: const TextStyle(
+                                        color: Colors.white),)
+                              ),
+                            ),
+
+                            const SizedBox(height: 10,),
+                            Padding(
+                              padding: const EdgeInsets.all(10.0),
+                              child: Container(
+                                  width: 300,
+                                  height: 50,
+                                  child: TextFormField(
+                                    controller: signupState_v.emailValue,
+                                    validator: (email) {
+                                      return signupState_v.validateEmail(
+                                          email!);
+                                    },
+                                    decoration: const InputDecoration(
+                                      hintText: 'Email',
+                                      hintStyle: TextStyle(color: Colors.white),
+                                      enabledBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: Colors.white,
+
+                                        ),
+                                      ),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: Colors.white,
+                                          width: 2.0,
+                                        ),
+                                      ),
+                                    ),
+                                    style: const TextStyle(
+                                        color: Colors.white),)
+                              ),
+                            ),
+
+
+                            const SizedBox(height: 10,),
+
+                            Padding(
+                              padding: const EdgeInsets.all(10.0),
+                              child: Container(
+                                  width: 300,
+                                  height: 50,
+                                  child: TextFormField(
+                                    controller: signupState_v.passwordOriginal,
+                                    validator: (password) {
+                                      return signupState_v.validatePassword(
+                                          password!);
+                                    },
+                                    obscureText: true,
+                                    decoration: const InputDecoration(
+                                      hintText: 'Password',
+                                      hintStyle: TextStyle(color: Colors.white),
+                                      enabledBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: Colors.white,
+
+                                        ),
+                                      ),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: Colors.white,
+                                          width: 2.0,
+                                        ),
+                                      ),
+                                    ),
+                                    style: const TextStyle(
+                                        color: Colors.white),)
+                              ),
+                            ),
+                            const SizedBox(height: 10,),
+
+                            Padding(
+                              padding: const EdgeInsets.all(10.0),
+                              child: Container(
+                                  width: 300,
+                                  height: 50,
+                                  child: TextFormField(
+                                    controller: signupState_v.passwordConfirm,
+                                    validator: (password) {
+                                      return signupState_v.confirmPassword(
+                                          password!);
+                                    },
+                                    obscureText: true,
+                                    decoration: const InputDecoration(
+                                      hintText: 'Confirm Password',
+
+                                      hintStyle: TextStyle(color: Colors.white),
+                                      enabledBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: Colors.white,
+
+                                        ),
+                                      ),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: Colors.white,
+                                          width: 2.0,
+                                        ),
+                                      ),
+                                    ),
+                                    style: const TextStyle(
+                                        color: Colors.white),)
+                              ),
+                            ),
+                          ]
+                      )
+                  ),
+
+                  const SizedBox(height: 10,),
+                  Align(
+                    alignment: Alignment.bottomRight,
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 300, bottom: 20),
+                      child: Row(
+                        children: [
+                          GestureDetector(
+                            onTap: () async {
+                              dynamic user = await signupState_v
+                                  .signupClicked();
+                              print("_______________________ user is : $user");
+
+                              if (user != null) {
+                                print("User added: ${user.uid}");
+                                Navigator.push(context, MaterialPageRoute(
+                                    builder: (context) {
+                                      return SignTwoPage(uid: user!.uid);
+                                    }
+
+                                ));
+                              }
+                              else if (signupState_v.error.isNotEmpty) {
+                                return showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return AlertDialog(
+                                          title: Text('Error'),
+                                          content: Text(signupState_v.error),
+                                          actions: <Widget>[
+                                            TextButton(
+                                                onPressed: () {
+                                                  signupState_v.emailValue
+                                                      .clear();
+                                                  signupState_v.passwordOriginal
+                                                      .clear();
+                                                  signupState_v.passwordConfirm
+                                                      .clear();
+                                                  signupState_v.name.clear();
+                                                  signupState_v.surname.clear();
+                                                  signupState_v.resetError();
+                                                  Navigator.of(context)
+                                                      .pop(); //
+                                                },
+                                                child: Text("Okay")
+                                            )
+                                          ]
+
+                                      );
+                                    }
+                                );
+                              }
+                            },
+
+                            child: const Text(
+                              "Next",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 18,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                    
-                  
-                    const SizedBox(height: 10,), 
-                     Padding(
-                    padding: EdgeInsets.all(10.0),
-                      child: Container(
-                         width: 300,
-                          height: 50,
-                    child: TextField(
-                      controller: _emailController,
-                      decoration: InputDecoration(
-                        hintText: 'Email',
-                        hintStyle: TextStyle(color: Colors.white),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Colors.white,
-                           
-                          ),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Colors.white, 
-                            width: 2.0,
-                          ),
-                        ),
-                      ),
-                      style: TextStyle(color: Colors.white),)
-                  ),
-                   ),
-
-              
-                 const SizedBox(height: 10,), 
-
-             Padding(
-                    padding: EdgeInsets.all(10.0),
-                      child: Container(
-                         width: 300,
-                          height: 50,
-                    child:  TextField(
-                      controller: _passwordController,
-                      decoration: InputDecoration(
-                        hintText: 'Password',
-                        hintStyle: TextStyle(color: Colors.white),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Colors.white,
-                           
-                          ),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Colors.white, 
-                            width: 2.0,
-                          ),
-                        ),
-                      ),
-                      style: TextStyle(color: Colors.white),)
-                  ),
-                   ),
-
-             
-                   const SizedBox(height: 10.0),
-                  Container(
-                width: 300,
-                   height: 50,
-                     child: SizedBox(
-                 width: 300,
-                height: 50,
-                    child: GestureDetector(
-                   onTap: () => signUp(),
-                      child: const Text(
-                    'Sign Up',
-                   style: TextStyle(color: Color.fromARGB(255, 255, 255, 255)),
-      ),
-    ),
-  ),
-),
-
- 
-          ]
-        
-          ),
+                  Align(
+                    alignment: Alignment.bottomLeft,
+                    child: Padding(
+                        padding: const EdgeInsets.only(left: 30, bottom: 20),
+                        child: Row(
+                          children: [
+                            GestureDetector(
+                              onTap: () {
+                                // Navigate to the guide page
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context){
+                                         return ChangeNotifierProvider.value(
+                                                value:loginState(),
+                                                child: myLogin()
+                                                );
+                                                }
+                                      ),
+                                );
+                              },
+                              child: const Text(
+                                "Login",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 18,
+                                ),
+                              ),
+                            ),
+                          ],
+                        )),
+                  )
+                ]
+            )
         )
-              )
-          ]
-        ) 
-  )
     );
-    
-
   }
-  void signUp() async {
-    
-  
-    // Get user input values
-    
-    String email = _emailController.text;
-    String password = _passwordController.text;
+}
 
-    User? user = await  _auth.signupWithEmailAndPassword(email, password );
-    
-    if (user!= null){
-      print ("User Successfully signup");
-      Navigator.pushNamed(context, "/login");
-    } else{
-      print("Some error happed");
-    }
-   
-  
 
-   
+  // void signUp() async {
+  //
+  //
+  //   // Get user input values
+  //
+  //   String email = _emailController.text;
+  //   String password = _passwordController.text;
+  //
+  //   User? user = await  _auth.signupWithEmailAndPassword(email, password );
+  //
+  //   if (user!= null){
+  //     print ("User Successfully signup");
+  //     Navigator.pushNamed(context, "/email");
+  //   } else{
+  //     print("Some error happed");
+  //   }
+
+
+
+
 
     // Store user data in Firestore
-  }
+  //}
 
-}
- 
+//}
