@@ -12,30 +12,25 @@ class forgotpsw extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final TextEditingController email = TextEditingController();
+    Color myColor = const Color.fromARGB(255, 74, 95, 86);
     return MaterialApp(
         home: Scaffold(
-          body: Stack(
-            children: [
-              Container(
-                color:const Color.fromARGB(255, 74, 95, 86), // Set background color here
-                width: double.infinity,
-                height: double.infinity,
-              ),
-              Align(
-                  alignment: Alignment.topCenter,
-                  child :FractionalTranslation(
-                    translation: Offset(0.0, -0.1),
-                    child: Image(
-                      height: 500,
-                      width: 500,
-                      image: AssetImage('assets/images/Anixihealth.png'),
+          body: Container(
+            color: myColor,  // Set background color here
+            width: double.infinity,
+            height: double.infinity,
+            child: ListView(
+              children: [
+                Container(
+                    height:500,
+                    decoration: const BoxDecoration(
+                      image: DecorationImage(
+                        image: AssetImage("assets/images/Anixihealth.png"),
+                        fit: BoxFit.scaleDown,
+                      ),
+                    )),
 
-                    ),
-                  )
-              ),
-              Align(
-                alignment: Alignment.center,
-                child: Column(
+                Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
@@ -75,8 +70,19 @@ class forgotpsw extends StatelessWidget {
                         await forgotState().resetPassword(email: email.text);
                         if(forgotState().error.isNotEmpty){
                           AlertDialog(
-                              title: Text('Error'),
-                              content: Text(forgotState().error),
+                              title: Text(
+                                  'Error',
+                                style:TextStyle(
+                                  color:Colors.red,
+                                  fontWeight: FontWeight.bold
+                                )
+                              ),
+                              content: Text(
+                                  forgotState().error,
+                                style: TextStyle(
+                                  color:myColor
+                                ),
+                              ),
                               actions: <Widget>[
                                 TextButton(
                                     onPressed: () {
@@ -84,7 +90,13 @@ class forgotpsw extends StatelessWidget {
                                       Navigator.of(context)
                                           .pop(); //
                                     },
-                                    child: Text("Okay")
+                                    child: Text(
+                                        "Ok",
+                                      style:TextStyle(
+                                        color:myColor,
+                                        fontWeight: FontWeight.bold
+                                      )
+                                    )
                                 )
                               ]
 
@@ -92,8 +104,17 @@ class forgotpsw extends StatelessWidget {
                         }
                         else{
                            AlertDialog(
-                              title: Text('Success'),
-                              content: Text("Password reset link succesfully sent to email!"),
+                              title: Text(
+                                  'Success',
+                                style:TextStyle(
+                                  color:Colors.green,
+                                  fontWeight: FontWeight.bold
+                                )),
+                              content: Text(
+                                  "Password reset link successfully sent to email!",
+                              style:TextStyle(
+                                color:myColor
+                              )),
                               actions: <Widget>[
                                 TextButton(
                                     onPressed: () {
@@ -110,7 +131,13 @@ class forgotpsw extends StatelessWidget {
                                         }),
                                       );
                                     },
-                                    child: Text("Okay")
+                                    child: Text(
+                                        "Ok",
+                                      style: TextStyle(
+                                        color: myColor,
+                                        fontWeight: FontWeight.bold
+                                      ),
+                                    )
                                 )
                               ]
 
@@ -137,57 +164,22 @@ class forgotpsw extends StatelessWidget {
 
                   ],
                 ),
-              ),
-              Align(
-                alignment: Alignment.bottomLeft,
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 280, bottom: 20),
-                  child: Row(
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                          // Navigate to the forgot password page
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => MySignUp()),
-                          );
-                        },
-                        child: const Text(
-                          "Sign up",
-                          style: TextStyle(
-                            color: Colors.white,
-
-                            fontSize: 18,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-
-              Align(
-                alignment: Alignment.bottomRight,
-                child: Padding(
-                    padding: const EdgeInsets.only(left: 30, bottom: 20),
+                Align(
+                  alignment: Alignment.bottomLeft,
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 280, bottom: 20),
                     child: Row(
                       children: [
                         GestureDetector(
                           onTap: () {
-
-                            // Navigate to the guide page
+                            // Navigate to the forgot password page
                             Navigator.push(
                               context,
-                              MaterialPageRoute(builder: (context) {
-                                return ChangeNotifierProvider.value(
-                                  value:loginState(),
-                                    child: myLogin()
-                                );
-                              }),
+                              MaterialPageRoute(builder: (context) => MySignUp()),
                             );
                           },
                           child: const Text(
-                            "Login",
+                            "Sign up",
                             style: TextStyle(
                               color: Colors.white,
 
@@ -196,10 +188,45 @@ class forgotpsw extends StatelessWidget {
                           ),
                         ),
                       ],
-                    )
+                    ),
+                  ),
                 ),
-              )
-            ],
+
+                Align(
+                  alignment: Alignment.bottomRight,
+                  child: Padding(
+                      padding: const EdgeInsets.only(left: 30, bottom: 20),
+                      child: Row(
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+
+                              // Navigate to the guide page
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) {
+                                  return ChangeNotifierProvider.value(
+                                    value:loginState(),
+                                      child: myLogin()
+                                  );
+                                }),
+                              );
+                            },
+                            child: const Text(
+                              "Login",
+                              style: TextStyle(
+                                color: Colors.white,
+
+                                fontSize: 18,
+                              ),
+                            ),
+                          ),
+                        ],
+                      )
+                  ),
+                )
+              ],
+            ),
           ),
         )
     );

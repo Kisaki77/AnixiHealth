@@ -1,4 +1,5 @@
 
+import 'package:health_anixi/State/signupState.dart';
 import 'package:health_anixi/firebase_auth/firebase_auth_services.dart';
 import 'package:health_anixi/pages/forgot.dart';
 import 'package:health_anixi/pages/guide.dart';
@@ -36,68 +37,55 @@ class _MyLoginState extends State<myLogin> {
 
 
     Color myColor = const Color.fromARGB(255, 74, 95, 86);
-    return MaterialApp(
-        home: Scaffold(
-          body: Form(
-            key:loginState.formKey,
-            child: Stack(
-              children: [
-                Container(
-                  color: myColor,  // Set background color here
-                  width: double.infinity,
-                  height: double.infinity,
-                ),
-                const Align(
-                    alignment: Alignment.topCenter,
-                    child :FractionalTranslation(
-                      translation: Offset(0.0, -0.1),
-                      child: Image(
-                        height: 500,
-                        width: 500,
-                        image: AssetImage('assets/images/Anixihealth.png'),
-
-                      ),
-                    )
-                ),
-
-                Align(
-                  alignment: Alignment.center,
-                  child: Column(
+    return Scaffold(
+          body: Container(
+              color: myColor,  // Set background color here
+              width: double.infinity,
+              height: double.infinity,
+            child: Form(
+              key:loginState.formKey,
+              child: ListView(
+                children: [
+                  Container(
+                      height:500,
+                      decoration: const BoxDecoration(
+                        image: DecorationImage(
+                          image: AssetImage("assets/images/Anixihealth.png"),
+                          fit: BoxFit.scaleDown,
+                        ),
+                      )),
+                  Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        const SizedBox(height: 200,),
-                        Padding(
-                          padding: EdgeInsets.all(10.0),
-                          child: Container(
-                              width: 300,
-                              height: 50,
-                              child: TextFormField(
-                                controller: loginState_v.email,
-                                validator: (email){
-                                  return loginState_v.validateEmail(email!);
-                                },
-                                decoration: InputDecoration(
-                                  hintText: 'Email',
-                                  hintStyle: TextStyle(color: Colors.white),
-                                  enabledBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                      color: Colors.white,
+                        Container(
+                            width: 300,
+                            height: 50,
+                            child: TextFormField(
+                              controller: loginState_v.email,
+                              validator: (email){
+                                return loginState_v.validateEmail(email!);
+                              },
+                              decoration: InputDecoration(
+                                hintText: 'Email',
+                                hintStyle: TextStyle(color: Colors.white),
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: Colors.white,
 
-                                    ),
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                      color: Colors.white,
-                                      width: 2.0,
-                                    ),
                                   ),
                                 ),
-                                style: TextStyle(color: Colors.white),)
-                          ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: Colors.white,
+                                    width: 2.0,
+                                  ),
+                                ),
+                              ),
+                              style: TextStyle(color: Colors.white),)
                         ),
                         Padding(
-                          padding: EdgeInsets.all(10.0),
+                          padding: EdgeInsets.all(20.0),
                           child: Container(
                               width: 300,
                               height: 50,
@@ -166,16 +154,42 @@ class _MyLoginState extends State<myLogin> {
                                   context: context,
                                   builder: (BuildContext context){
                                     return AlertDialog(
-                                        title:Text('Error'),
-                                        content:Text(loginState_v.error),
+                                        title:Center(
+                                          child: Text(
+                                              'Error',
+                                            style:TextStyle(
+                                              color: Colors.red,
+                                              fontWeight: FontWeight.bold,
+
+                                            )
+                                          ),
+                                        ),
+                                        content: Text(
+                                            loginState_v.error,
+                                          style: TextStyle(
+                                            color: myColor
+                                          ),
+                                        ),
                                         actions:<Widget>[
                                           TextButton(
                                               onPressed:(){
                                                 loginState_v.email.clear();
                                                 loginState_v.password.clear();
+                                                loginState_v.resetError();
                                                 Navigator.of(context).pop();//
+
                                               },
-                                              child:Text("Okay")
+                                              child:Center(
+                                                child: Text(
+                                                    "Ok",
+                                                  style:TextStyle(
+                                                    color: myColor,
+                                                    fontWeight: FontWeight.bold
+                                                  )
+
+
+                                                ),
+                                              )
                                           )
                                         ]
 
@@ -209,19 +223,20 @@ class _MyLoginState extends State<myLogin> {
 
                       ]
                   ),
-                ),
-                Align(
-                  alignment: Alignment.bottomLeft,
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 300, bottom: 20),
+                  Padding(
+                    padding: const EdgeInsets.all(55),
                     child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         GestureDetector(
                           onTap: () {
                             // Navigate to the forgot password page
                             Navigator.push(
                               context,
-                              MaterialPageRoute(builder: (context) => MySignUp()),
+                              MaterialPageRoute(builder: (context) => ChangeNotifierProvider.value(
+                                value:signupState(),
+                                  child: MySignUp())
+                              ),
                             );
                           },
                           child: const Text(
@@ -232,44 +247,33 @@ class _MyLoginState extends State<myLogin> {
                               fontSize: 18,
                             ),
                           ),
+                        ),GestureDetector(
+                          onTap: () {
+
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => const GuidePage()),
+                            );
+                          },
+                          child: const Text(
+                            "See Guide",
+                            style: TextStyle(
+                              color: Colors.white,
+
+                              fontSize: 18,
+                            ),
+                          ),
                         ),
                       ],
                     ),
                   ),
-                ),
 
-                Align(
-                  alignment: Alignment.bottomRight,
-                  child: Padding(
-                      padding: const EdgeInsets.only(left: 30, bottom: 20),
-                      child: Row(
-                        children: [
-                          GestureDetector(
-                            onTap: () {
-
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(builder: (context) => const GuidePage()),
-                              );
-                            },
-                            child: const Text(
-                              "See Guide",
-                              style: TextStyle(
-                                color: Colors.white,
-
-                                fontSize: 18,
-                              ),
-                            ),
-                          ),
-                        ],
-                      )
-                  ),
-                )
-              ],
+                ],
+              ),
             ),
           ),
-        )
-    );
+        );
+
   }
   // void _signIn() async {
   //

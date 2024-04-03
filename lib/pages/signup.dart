@@ -40,210 +40,197 @@ class _MySignUpState extends State<MySignUp> {
   @override
   Widget build(BuildContext context) {
     final signupState_v = Provider.of<signupState>(context);
+    Color myColor = const Color.fromARGB(255, 74, 95, 86);
 
-    return Form(
-        key: signupState_v.formKey,
-        child: Scaffold(
-            body: Stack(
+    return Scaffold(
+        body: Form(
+          key: signupState_v.formKey,
+          child: Container(
+            color: myColor,  // Set background color here
+            width: double.infinity,
+            height: double.infinity,
+            child: ListView(
                 children: [
-
                   Container(
-                    color: const Color(0xff4D6159), // Set background color here
-                    width: double.infinity,
-                    height: double.infinity,
-                  ),
-                  const Align(
-                      alignment: Alignment.topCenter,
-                      child: FractionalTranslation(
-                        translation: Offset(0.0, -0.1),
-                        child: Image(
-                          height: 400,
-                          width: 500,
-                          image: AssetImage('assets/images/Anixihealth.png'),
-
+                      height:400,
+                      decoration: const BoxDecoration(
+                        image: DecorationImage(
+                          image: AssetImage("assets/images/Anixihealth.png"),
+                          fit: BoxFit.scaleDown,
                         ),
-                      )
-                  ),
+                      )),
 
-                  const SizedBox(height: 100,),
-                  Align(
-                      alignment: Alignment.center,
-                      child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            const SizedBox(height: 150,),
-                            Padding(
-                              padding: const EdgeInsets.all(10.0),
-                              child: Container(
-                                  width: 300,
-                                  height: 50,
-                                  child: TextFormField(
-                                    controller: signupState_v.name,
-                                    validator: (name) {
-                                      return signupState_v.validateName(name!);
-                                    },
-                                    decoration: const InputDecoration(
-                                      hintText: 'First Name',
-                                      hintStyle: TextStyle(color: Colors.white),
-                                      enabledBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: Colors.white,
+                  Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Container(
+                            width: 300,
+                            height: 50,
+                            child: TextFormField(
+                              controller: signupState_v.name,
+                              validator: (name) {
+                                return signupState_v.validateName(name!);
+                              },
+                              decoration: const InputDecoration(
+                                hintText: 'First Name',
+                                hintStyle: TextStyle(color: Colors.white),
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: Colors.white,
 
-                                        ),
-                                      ),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: Colors.white,
-                                          width: 2.0,
-                                        ),
-                                      ),
-                                    ),
-                                    style: const TextStyle(
-                                        color: Colors.white),)
+                                  ),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: Colors.white,
+                                    width: 2.0,
+                                  ),
+                                ),
                               ),
-                            ),
+                              style: const TextStyle(
+                                  color: Colors.white),)
+                        ),
 
-                            const SizedBox(height: 10,),
+                        const SizedBox(height: 10,),
 
 
-                            Padding(
-                              padding: const EdgeInsets.all(10.0),
-                              child: Container(
-                                  width: 300,
-                                  height: 50,
-                                  child: TextFormField(
-                                    controller: signupState_v.surname,
-                                    validator: (surname) {
-                                      return signupState_v.validateSurname(
-                                          surname!);
-                                    },
-                                    decoration: const InputDecoration(
-                                      hintText: 'Last Name',
-                                      hintStyle: TextStyle(color: Colors.white),
-                                      enabledBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: Colors.white,
+                        Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: Container(
+                              width: 300,
+                              height: 50,
+                              child: TextFormField(
+                                controller: signupState_v.surname,
+                                validator: (surname) {
+                                  return signupState_v.validateSurname(
+                                      surname!);
+                                },
+                                decoration: const InputDecoration(
+                                  hintText: 'Last Name',
+                                  hintStyle: TextStyle(color: Colors.white),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                      color: Colors.white,
 
-                                        ),
-                                      ),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: Colors.white,
-                                          width: 2.0,
-                                        ),
-                                      ),
                                     ),
-                                    style: const TextStyle(
-                                        color: Colors.white),)
-                              ),
-                            ),
-
-                            const SizedBox(height: 10,),
-                            Padding(
-                              padding: const EdgeInsets.all(10.0),
-                              child: Container(
-                                  width: 300,
-                                  height: 50,
-                                  child: TextFormField(
-                                    controller: signupState_v.emailValue,
-                                    validator: (email) {
-                                      return signupState_v.validateEmail(
-                                          email!);
-                                    },
-                                    decoration: const InputDecoration(
-                                      hintText: 'Email',
-                                      hintStyle: TextStyle(color: Colors.white),
-                                      enabledBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: Colors.white,
-
-                                        ),
-                                      ),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: Colors.white,
-                                          width: 2.0,
-                                        ),
-                                      ),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                      color: Colors.white,
+                                      width: 2.0,
                                     ),
-                                    style: const TextStyle(
-                                        color: Colors.white),)
-                              ),
-                            ),
+                                  ),
+                                ),
+                                style: const TextStyle(
+                                    color: Colors.white),)
+                          ),
+                        ),
 
+                        const SizedBox(height: 10,),
+                        Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: Container(
+                              width: 300,
+                              height: 50,
+                              child: TextFormField(
+                                controller: signupState_v.emailValue,
+                                validator: (email) {
+                                  return signupState_v.validateEmail(
+                                      email!);
+                                },
+                                decoration: const InputDecoration(
+                                  hintText: 'Email',
+                                  hintStyle: TextStyle(color: Colors.white),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                      color: Colors.white,
 
-                            const SizedBox(height: 10,),
-
-                            Padding(
-                              padding: const EdgeInsets.all(10.0),
-                              child: Container(
-                                  width: 300,
-                                  height: 50,
-                                  child: TextFormField(
-                                    controller: signupState_v.passwordOriginal,
-                                    validator: (password) {
-                                      return signupState_v.validatePassword(
-                                          password!);
-                                    },
-                                    obscureText: true,
-                                    decoration: const InputDecoration(
-                                      hintText: 'Password',
-                                      hintStyle: TextStyle(color: Colors.white),
-                                      enabledBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: Colors.white,
-
-                                        ),
-                                      ),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: Colors.white,
-                                          width: 2.0,
-                                        ),
-                                      ),
                                     ),
-                                    style: const TextStyle(
-                                        color: Colors.white),)
-                              ),
-                            ),
-                            const SizedBox(height: 10,),
-
-                            Padding(
-                              padding: const EdgeInsets.all(10.0),
-                              child: Container(
-                                  width: 300,
-                                  height: 50,
-                                  child: TextFormField(
-                                    controller: signupState_v.passwordConfirm,
-                                    validator: (password) {
-                                      return signupState_v.confirmPassword(
-                                          password!);
-                                    },
-                                    obscureText: true,
-                                    decoration: const InputDecoration(
-                                      hintText: 'Confirm Password',
-
-                                      hintStyle: TextStyle(color: Colors.white),
-                                      enabledBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: Colors.white,
-
-                                        ),
-                                      ),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: Colors.white,
-                                          width: 2.0,
-                                        ),
-                                      ),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                      color: Colors.white,
+                                      width: 2.0,
                                     ),
-                                    style: const TextStyle(
-                                        color: Colors.white),)
-                              ),
-                            ),
-                          ]
-                      )
+                                  ),
+                                ),
+                                style: const TextStyle(
+                                    color: Colors.white),)
+                          ),
+                        ),
+
+
+                        const SizedBox(height: 10,),
+
+                        Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: Container(
+                              width: 300,
+                              height: 50,
+                              child: TextFormField(
+                                controller: signupState_v.passwordOriginal,
+                                validator: (password) {
+                                  return signupState_v.validatePassword(
+                                      password!);
+                                },
+                                obscureText: true,
+                                decoration: const InputDecoration(
+                                  hintText: 'Password',
+                                  hintStyle: TextStyle(color: Colors.white),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                      color: Colors.white,
+
+                                    ),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                      color: Colors.white,
+                                      width: 2.0,
+                                    ),
+                                  ),
+                                ),
+                                style: const TextStyle(
+                                    color: Colors.white),)
+                          ),
+                        ),
+                        const SizedBox(height: 10,),
+
+                        Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: Container(
+                              width: 300,
+                              height: 50,
+                              child: TextFormField(
+                                controller: signupState_v.passwordConfirm,
+                                validator: (password) {
+                                  return signupState_v.confirmPassword(
+                                      password!);
+                                },
+                                obscureText: true,
+                                decoration: const InputDecoration(
+                                  hintText: 'Confirm Password',
+
+                                  hintStyle: TextStyle(color: Colors.white),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                      color: Colors.white,
+
+                                    ),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                      color: Colors.white,
+                                      width: 2.0,
+                                    ),
+                                  ),
+                                ),
+                                style: const TextStyle(
+                                    color: Colors.white),)
+                          ),
+                        ),
+                      ]
                   ),
 
                   const SizedBox(height: 10,),
@@ -273,8 +260,21 @@ class _MySignUpState extends State<MySignUp> {
                                     context: context,
                                     builder: (BuildContext context) {
                                       return AlertDialog(
-                                          title: Text('Error'),
-                                          content: Text(signupState_v.error),
+                                          title: Center(
+                                              child: Text(
+                                                  'Error',
+                                                style: TextStyle(
+                                                  color:Colors.red,
+                                                  fontWeight: FontWeight.bold
+                                                ),
+                                              )
+                                          ),
+                                          content: Text(
+                                              signupState_v.error,
+                                            style: TextStyle(
+                                              color:myColor
+                                            ),
+                                          ),
                                           actions: <Widget>[
                                             TextButton(
                                                 onPressed: () {
@@ -290,7 +290,15 @@ class _MySignUpState extends State<MySignUp> {
                                                   Navigator.of(context)
                                                       .pop(); //
                                                 },
-                                                child: Text("Okay")
+                                                child: Center(
+                                                    child: Text(
+                                                        "Okay",
+                                                      style: TextStyle(
+                                                        color: myColor,
+                                                        fontWeight: FontWeight.bold
+                                                      ),
+                                                    )
+                                                )
                                             )
                                           ]
 
@@ -345,7 +353,8 @@ class _MySignUpState extends State<MySignUp> {
                         )),
                   )
                 ]
-            )
+            ),
+          ),
         )
     );
   }

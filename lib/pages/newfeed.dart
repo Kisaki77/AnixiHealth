@@ -1,11 +1,37 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:health_anixi/Models/UserProfile.dart';
+import 'package:health_anixi/Navigate/Wrapper.dart';
+import 'package:health_anixi/State/myProfileState.dart';
+import 'package:health_anixi/pages/PaymentScreen.dart';
 
-class NewsFeedPage extends StatelessWidget {
+class NewsFeedPage extends StatefulWidget {
   const NewsFeedPage({Key? key}) : super(key: key);
 
   @override
+  State<NewsFeedPage> createState() => _NewsFeedPageState();
+}
+
+class _NewsFeedPageState extends State<NewsFeedPage> {
+  UserProfile? profile;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+
+    myProfileState().fetchProfileData().then((value){
+      setState(() {
+        profile = value;
+      });
+
+    });
+    super.initState();
+  }
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return profile==null? Container(
+      child:Text("Loading")
+    ):Scaffold(
       endDrawer: Drawer(
         child: Container(
           color: const Color.fromARGB(255, 74, 95, 86),
@@ -31,7 +57,7 @@ class NewsFeedPage extends StatelessWidget {
                     ),
                     SizedBox(height: 10),
                     Text(
-                      'Luwe Xaba',
+                      profile!.name ?? "Loading",
                       style: TextStyle(fontSize: 15, color: Color.fromARGB(255, 249, 252, 250)),
                     ),
                     SizedBox(height: 10),
@@ -107,7 +133,9 @@ class NewsFeedPage extends StatelessWidget {
                   'Members',
                   style: TextStyle(fontSize: 15, color: Colors.white,),
                 ),
-                onTap: (){
+                onTap: () async{
+                  UserProfile user = await myProfileState().fetchProfileData();
+
                   //Navigator.push(context, MaterialPageRoute(builder: (context) => MyMembers()), );
                 },
               ),
@@ -126,6 +154,45 @@ class NewsFeedPage extends StatelessWidget {
                 ),
                 onTap: (){
                   // Navigator.push(context, MaterialPageRoute(builder: (context) => Myinvites()), );
+                },
+              ),
+              ListTile(
+                leading: ClipOval(
+                  child: Image.asset(
+                    'assets/images/Supporter icon.png', // Provide the path to your image asset here
+                    width: 50,
+                    height: 50,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                title: Text(
+                  'Donate',
+                  style: TextStyle(fontSize: 15, color: Colors.white,),
+                ),
+                onTap: (){
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => PaymentScreen()), );
+                },
+              ),
+              ListTile(
+                leading: ClipOval(
+                  child: Image.asset(
+                    'assets/images/Supporter icon.png', // Provide the path to your image asset here
+                    width: 50,
+                    height: 50,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                title: Text(
+                  'Log out',
+                  style: TextStyle(fontSize: 15, color: Colors.white,),
+                ),
+                onTap: ()async{
+                  FirebaseAuth.instance.signOut();
+                  Navigator.of(context).pop();//closes menu in home pAGE
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => Wrapper())
+                  );
                 },
               ),
 
