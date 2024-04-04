@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 import "package:health_anixi/pages/PaymentScreen.dart";
+import "package:health_anixi/pages/newfeed.dart";
 import "package:health_anixi/pages/screen.dart";
 import "package:provider/provider.dart";
 import "package:firebase_auth/firebase_auth.dart";
@@ -30,7 +31,7 @@ class _WrapperState extends State<Wrapper> {
 
       else{
 
-        return PaymentScreen();
+        return NewsFeedPage();
       }
     }catch (e) {
       return MyScreen();

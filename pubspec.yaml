@@ -45,6 +45,7 @@ dependencies:
   firebase_storage: ^11.6.10
   http: ^1.2.1
   crypto: ^3.0.3
+  geolocator: ^11.0.0
 
 dev_dependencies:
   flutter_test:
@@ -63,19 +64,36 @@ dev_dependencies:
 # The following section is specific to Flutter packages.
 flutter:
   assets:
-    - assets/images/anixi_logo.png
-    - assets/images/iconfeed.png
-    - assets/images/flowerblack-02.png
     - assets/images/logo.webp
     - assets/images/ScreenImage.jpg
-    - assets/images/bell.png
-    - assets/images/menuIcon.png
-    - assets/images/Iconmenu.png
+    - assets/images/guide.png
+    - assets/images/guide_1.png
+    - assets/images/guide_2.png
     - assets/images/Supporter icon.png
     - assets/images/Soldier icon.png
     - assets/images/Survivor icon.png
     - assets/images/logo.jpg
     - assets/images/profile.jpg
+    - assets/images/Anixihealth.png
+    - assets/images/iconfeed.png
+    - assets/images/flowerblack.png
+    - assets/images/bell.png
+    - assets/images/menuIcon.png
+    - assets/images/chevron-up.png
+    - assets/images/heart.png
+    - assets/images/Iconmenu.png
+    - assets/images/motor.jpg
+    - assets/images/diabetes.jpg
+    - assets/images/heart attack.webp
+    - assets/images/HIV.webp
+    - assets/images/covid.jpg
+    - assets/images/hearty.png
+    - assets/images/dropdown.png
+    - assets/images/belle.png
+    - assets/images/post.png
+    - assets/images/messenger.png
+    - assets/images/friends.png
+    - assets/images/back.png
     - assets/images/Anixihealth.png
 
 

@@ -3,6 +3,10 @@ import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:health_anixi/Navigate/Wrapper.dart';
 import 'package:health_anixi/State/loginState.dart';
+import 'package:health_anixi/bottom_menu_pages/friends.dart';
+import 'package:health_anixi/bottom_menu_pages/messages.dart';
+import 'package:health_anixi/bottom_menu_pages/new_post.dart';
+import 'package:health_anixi/bottom_menu_pages/notification.dart';
 import 'package:health_anixi/pages/PaymentScreen.dart';
 import 'package:health_anixi/pages/VideoUpload.dart';
 import 'package:health_anixi/pages/login.dart';
@@ -67,6 +71,10 @@ class MyApp extends StatelessWidget {
       routes: {
         '/login': (context) => myLogin(),
         '/home': (context) => NewsFeedPage(),
+        '/friends': (context) => Friends(),
+        '/messages': (context) => Messages(),
+        '/new_post': (context) => NewPost(),
+        '/notifications': (context) => Notifications(),
       },
     );
   }
