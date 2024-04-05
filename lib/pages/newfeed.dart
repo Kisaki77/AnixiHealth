@@ -1,5 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:health_anixi/Navigate/Wrapper.dart';
+import 'package:health_anixi/pages/PaymentScreen.dart';
+import 'package:health_anixi/pages/VideoUpload.dart';
 import '../menu_pages/group.dart';
 import '../menu_pages/invites.dart';
 import '../menu_pages/member.dart';
@@ -179,7 +182,52 @@ class _NewsFeedPageState extends State<NewsFeedPage> {
                   );
                 },
               ),
-              // Add the Sign Out ListTile here
+              ListTile(
+                leading: ClipOval(
+                  child: Image.asset(
+                    'assets/images/Survivor icon.png',
+                    width: 50,
+                    height: 50,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                title: const Text(
+                  'Videos',
+                  style: TextStyle(
+                    fontSize: 15,
+                    color: Colors.white,
+                  ),
+                ),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => VideoUpload()),
+                  );
+                },
+              ),
+              ListTile(
+                leading: ClipOval(
+                  child: Image.asset(
+                    'assets/images/Survivor icon.png',
+                    width: 50,
+                    height: 50,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                title: const Text(
+                  'Donate',
+                  style: TextStyle(
+                    fontSize: 15,
+                    color: Colors.white,
+                  ),
+                ),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => PaymentScreen()),
+                  );
+                },
+              ),
               ListTile(
                 leading: const Icon(
                   Icons.logout,
@@ -196,6 +244,8 @@ class _NewsFeedPageState extends State<NewsFeedPage> {
                   _signOut();
                 },
               ),
+              // Add the Sign Out ListTile here
+
             ],
           ),
         ),
@@ -589,7 +639,10 @@ class _NewsFeedPageState extends State<NewsFeedPage> {
   void _signOut() async {
   try {
     await FirebaseAuth.instance.signOut();
-    Navigator.of(context).popUntil((route) => route.isFirst);
+    Navigator.push(context, MaterialPageRoute(builder: (context){
+      return Wrapper();
+    }));
+
   } catch (e) {
     print("Error signing out: $e");
   }

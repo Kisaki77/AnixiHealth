@@ -17,9 +17,10 @@ class myProfileState{
         city: doc.get("City"),
         name: doc.get("Name"),
         email: doc.get("Email"),
-        gender: doc.get("Male"),
+        gender: doc.get("Gender"),
         surname: doc.get("Surname"),
-        userName: doc.get("Username")
+        userName: doc.get("Username"),
+        condition: doc.get("Condition")
     );
     return user;
 

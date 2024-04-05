@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 import "package:health_anixi/pages/PaymentScreen.dart";
+import "package:health_anixi/pages/VideoUpload.dart";
 import "package:health_anixi/pages/newfeed.dart";
 import "package:health_anixi/pages/screen.dart";
 import "package:provider/provider.dart";
@@ -30,8 +31,8 @@ class _WrapperState extends State<Wrapper> {
       }
 
       else{
-
-        return NewsFeedPage();
+          return VideoUpload();
+        //return NewsFeedPage();
       }
     }catch (e) {
       return MyScreen();

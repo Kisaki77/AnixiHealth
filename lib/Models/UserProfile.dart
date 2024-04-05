@@ -10,6 +10,7 @@ class UserProfile{
   String? province;
   String? birthday;
   String? userName;
+  String? condition;
 
   UserProfile({
     required this.birthday,
@@ -20,7 +21,8 @@ class UserProfile{
     required this.email,
     required this.gender,
     required this.surname,
-    required this.userName
+    required this.userName,
+    required this.condition
 });
 
 
