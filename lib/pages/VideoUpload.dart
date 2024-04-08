@@ -3,7 +3,7 @@
 import "dart:io";
 
 import "package:flutter/material.dart";
-import "package:health_anixi/Resources/save_video.dart";
+import "package:health_anixi/Resources/save_media.dart";
 import "package:health_anixi/State/VideoUploadState.dart";
 import "package:health_anixi/pages/VideoLists.dart";
 import "package:video_player/video_player.dart";
@@ -57,7 +57,7 @@ class _VideoUploadState extends State<VideoUpload> {
         ]
       ),
 
-      body:Column(
+      body:ListView(
         children: [
           Center(
            child:_videoUrl !=null ? _videoPreviewWidget(): Padding(
@@ -70,25 +70,28 @@ class _VideoUploadState extends State<VideoUpload> {
              ),
            )
           ),
-          GestureDetector(
-            onTap: ()async{
-              _videoUrl = await VideoUploadState().pickVideo();
-              _intializeVideoPlayer();
-            },
-            child: Container(
-              height: 55,
-              width: 300,
-              decoration: BoxDecoration(
-                color: myColor, // Background color
-                borderRadius: BorderRadius.circular(0), // Rounded corners
-              ),
-              child: Center(
-                child: Text(
-                  'Add Video',
-                  style: TextStyle(
-                    color:Colors.white, // Text color
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18,
+          Padding(
+            padding: const EdgeInsets.all(20),
+            child: GestureDetector(
+              onTap: ()async{
+                _videoUrl = await VideoUploadState().pickVideo();
+                _intializeVideoPlayer();
+              },
+              child: Container(
+                height: 55,
+                width: 300,
+                decoration: BoxDecoration(
+                  color: myColor, // Background color
+                  borderRadius: BorderRadius.circular(0), // Rounded corners
+                ),
+                child: Center(
+                  child: Text(
+                    'Add Video',
+                    style: TextStyle(
+                      color:Colors.white, // Text color
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                    ),
                   ),
                 ),
               ),
@@ -126,29 +129,32 @@ class _VideoUploadState extends State<VideoUpload> {
             child:VideoPlayer(videoController!)
           ),SizedBox(
             height: 10,
-          ),GestureDetector(
-            onTap: ()async{
-              downloadUrl = await StoreData().uploadVideo(_videoUrl!);
-              await StoreData().saveVideoData(downloadUrl!);
-              setState(() {
-                _videoUrl = null;// to clear video
-              });
-            },
+          ),Padding(
+            padding: const EdgeInsets.all(20),
+            child: GestureDetector(
+              onTap: ()async{
+                downloadUrl = await StoreData().uploadMedia(videoUrl: _videoUrl!, mediaType: "Video", extension: "mp4");
+                await StoreData().saveVideoData(downloadUrl!);
+                setState(() {
+                  _videoUrl = null;// to clear video
+                });
+              },
 
-            child: Container(
-              height: 55,
-              width: 300,
-              decoration: BoxDecoration(
-                color: const Color.fromARGB(255, 243, 249, 253), // Background color
-                borderRadius: BorderRadius.circular(0), // Rounded corners
-              ),
-              child: Center(
-                child: Text(
-                  'Upload Video',
-                  style: TextStyle(
-                    color:myColor, // Text color
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18,
+              child: Container(
+                height: 55,
+                width: 300,
+                decoration: BoxDecoration(
+                  color: const Color.fromARGB(255, 243, 249, 253), // Background color
+                  borderRadius: BorderRadius.circular(0), // Rounded corners
+                ),
+                child: Center(
+                  child: Text(
+                    'Upload Video',
+                    style: TextStyle(
+                      color:myColor, // Text color
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                    ),
                   ),
                 ),
               ),

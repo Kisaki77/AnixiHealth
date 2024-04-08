@@ -1,8 +1,10 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:health_anixi/State/new_postState.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:geolocator/geolocator.dart';
 import '../pages/newfeed.dart';
+import 'package:health_anixi/Resources/save_media.dart';
 
 class NewPost extends StatefulWidget {
   const NewPost({Key? key}) : super(key: key);
@@ -16,12 +18,14 @@ class _NewPostState extends State<NewPost> {
   bool _showTagFriendsContainer = false;
 
   // Function to allow the user to choose an image
-  Future<void> _pickImage() async {
+  Future<String> _pickImage() async {
     final picker = ImagePicker();
     final pickedImage = await picker.pickImage(source: ImageSource.gallery);
     setState(() {
       _imageFile = pickedImage;
     });
+
+    return pickedImage!.path;
   }
 
   void _shareLocation() {
@@ -83,7 +87,8 @@ class _NewPostState extends State<NewPost> {
       context: context,
       builder: (BuildContext context) {
         return Container(
-          height: MediaQuery.of(context).size.height / 5, // Adjust the height as needed
+          height: MediaQuery.of(context).size.height /
+              5, // Adjust the height as needed
           decoration: BoxDecoration(
             color: const Color.fromARGB(255, 217, 212, 212),
             borderRadius: const BorderRadius.only(
@@ -124,9 +129,11 @@ class _NewPostState extends State<NewPost> {
                       // Add your action here
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color.fromARGB(255, 74, 95, 86), // Change button text color to white
+                      backgroundColor: const Color.fromARGB(
+                          255, 74, 95, 86), // Change button text color to white
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.zero, // Set border radius to zero
+                        borderRadius:
+                            BorderRadius.zero, // Set border radius to zero
                       ),
                     ),
                     child: const Text(
@@ -140,7 +147,6 @@ class _NewPostState extends State<NewPost> {
                   ),
                 ),
               ),
-
             ],
           ),
         );
@@ -148,9 +154,8 @@ class _NewPostState extends State<NewPost> {
     );
   }
 
-
-
-
+  Color myColor = const Color.fromARGB(255, 74, 95, 86);
+  TextEditingController thoughts = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -186,7 +191,8 @@ class _NewPostState extends State<NewPost> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            const TextField(
+            TextFormField(
+              controller: thoughts,
               decoration: InputDecoration(
                 hintText: 'Share your thoughts',
                 hintStyle: TextStyle(color: Colors.grey),
@@ -199,7 +205,9 @@ class _NewPostState extends State<NewPost> {
             ),
             const SizedBox(height: 20),
             ElevatedButton(
-              onPressed: _pickImage,
+              onPressed: () async {
+                _pickImage();
+              },
               style: ElevatedButton.styleFrom(
                 padding: EdgeInsets.zero,
                 backgroundColor: const Color.fromARGB(255, 180, 178, 178),
@@ -212,27 +220,27 @@ class _NewPostState extends State<NewPost> {
                 height: 230,
                 child: _imageFile == null
                     ? const Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      Icons.image,
-                      color: Color.fromARGB(255, 39, 38, 38),
-                    ),
-                    Text(
-                      'Upload a Photo',
-                      style: TextStyle(
-                        color: Color.fromARGB(255, 65, 63, 63),
-                        fontSize: 10,
-                      ),
-                    ),
-                  ],
-                )
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.image,
+                            color: Color.fromARGB(255, 39, 38, 38),
+                          ),
+                          Text(
+                            'Upload a Photo',
+                            style: TextStyle(
+                              color: Color.fromARGB(255, 65, 63, 63),
+                              fontSize: 10,
+                            ),
+                          ),
+                        ],
+                      )
                     : Image.file(
-                  File(_imageFile!.path),
-                  fit: BoxFit.cover,
-                  width: double.infinity,
-                  height: double.infinity,
-                ),
+                        File(_imageFile!.path),
+                        fit: BoxFit.cover,
+                        width: double.infinity,
+                        height: double.infinity,
+                      ),
               ),
             ),
             const SizedBox(height: 25),
@@ -283,6 +291,50 @@ class _NewPostState extends State<NewPost> {
                       style: TextStyle(color: Colors.grey),
                     ),
                   ],
+                ),
+              ),
+            ),
+            GestureDetector(
+              onTap: () async {
+                try {
+                  if (_imageFile != null) {
+                   String url = await  new_postState().saveMedia(
+                        media: _imageFile!.path,
+                        mediaType: "Picture",
+                        extension: "png"
+                    );
+
+                    await new_postState().submitPost(
+                        thoughts: thoughts.text,
+                        location: "Ladysmith",
+                        media: url,
+                        mediaType: "Picture",
+                        extension: "png");
+                    setState(() {
+                      _imageFile = null;
+                    });
+                  }
+                }
+                catch(e){
+
+                }
+              },
+              child: Container(
+                height: 55,
+                width: 300,
+                decoration: BoxDecoration(
+                  color: myColor, // Background color
+                  borderRadius: BorderRadius.circular(0), // Rounded corners
+                ),
+                child: Center(
+                  child: Text(
+                    'Submit Post',
+                    style: TextStyle(
+                      color: Colors.white, // Text color
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                    ),
+                  ),
                 ),
               ),
             ),
