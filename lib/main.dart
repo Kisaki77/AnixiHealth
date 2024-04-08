@@ -24,7 +24,7 @@ void main() async {
     // Initialize Firebase based on the platform
     if (Platform.isAndroid) {
       await Firebase.initializeApp(
-        options: FirebaseOptions(
+        options: const FirebaseOptions(
           apiKey: 'AIzaSyDr-9xMQjTBMKOQ-G5yCrWDLNo2qTK3olA', 
       appId: '1:208342776230:android:905a409a523eef50f97767', 
     messagingSenderId: '208342776230',
@@ -33,7 +33,7 @@ void main() async {
       );
     } else if (Platform.isIOS) {
       await Firebase.initializeApp(
-        options: FirebaseOptions(
+        options: const FirebaseOptions(
           apiKey: 'AIzaSyBC8KC460JH4zihV6apQH5wzEAxIFW8Ub4',
           appId: '1:208342776230:ios:472e891fa0a9e836f97767',
           messagingSenderId: '208342776230',

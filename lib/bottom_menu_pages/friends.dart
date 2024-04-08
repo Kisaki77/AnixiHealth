@@ -39,7 +39,7 @@ class _FriendsState extends State<Friends> {
           ),
         ),
       ),
-
+      
       body: Column(
         children: [
           Padding(
@@ -91,7 +91,7 @@ class _FriendsState extends State<Friends> {
               ],
             ),
           ),
-          const SizedBox(height: 10),
+         const SizedBox(height: 10),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 25.0),
             child: TextFormField(
@@ -100,9 +100,9 @@ class _FriendsState extends State<Friends> {
                 border: OutlineInputBorder(),
                 contentPadding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
                 suffixIcon: Icon(Icons.search),
-                // Move the search icon to the right side
+                 // Move the search icon to the right side
               ),
-
+              
             ),
           ),
 

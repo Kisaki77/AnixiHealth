@@ -43,3 +43,5 @@ app.*.map.json
 /android/app/release
 /firebase-tools-instant-win.exe
 /lib/APIs/OzowApi.dart
+/lib/State/PaymentScreenState.dart
+/lib/Pages/PaymentScreen.dart

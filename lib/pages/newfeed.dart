@@ -223,39 +223,39 @@ class _NewsFeedPageState extends State<NewsFeedPage> {
                     title: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Padding(
-                          padding: const EdgeInsets.only(left: 16),
-                          child: Image.asset(
-                            'assets/images/iconfeed.png',
-                            width: 90,
-                            height: 55,
-                            color: Colors.white,
-                          ),
-                        ),
-                        const Spacer(),
-                        const Text(
-                          'NEWS FEED',
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
-                        ),
-                        const Spacer(),
-                      ],
+                       Padding(
+                    padding: const EdgeInsets.only(left: 16),
+                    child: Image.asset(
+                      'assets/images/iconfeed.png',
+                      width: 90,
+                      height: 55,
+                      color: Colors.white,
                     ),
-                    actions: [
-                      IconButton(
-                        onPressed: () {
-                          Scaffold.of(context).openEndDrawer();
-                        },
-                        icon: const Icon(Icons.menu, color: Colors.white),
-                      ),
-                      const SizedBox(width: 20), // Adjust the space as needed
-                    ],
                   ),
+                  const Spacer(),
+                  const Text(
+                    'NEWS FEED',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+                  const Spacer(),
+                ],
+              ),
+              actions: [
+                IconButton(
+                  onPressed: () {
+                    Scaffold.of(context).openEndDrawer();
+                  },
+                  icon: const Icon(Icons.menu, color: Colors.white),
                 ),
-                Positioned(
+                const SizedBox(width: 20), // Adjust the space as needed
+              ],
+            ),
+          ),
+             Positioned(
                   bottom: 0,
                   left: 0,
                   right: 0,
@@ -498,15 +498,15 @@ class _NewsFeedPageState extends State<NewsFeedPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               GestureDetector(
-                onTap: () {
-                  Navigator.pushNamed(context, '/home');
-                },
-                child: const Icon(
-                  Icons.expand_more,
-                  size: 40,
-                  color: Colors.grey, // Adjust the color as needed
-                ),
+              onTap: () {
+                Navigator.pushNamed(context, '/home');
+              },
+              child: const Icon(
+                Icons.expand_more,
+                size: 40,
+                color: Colors.grey, // Adjust the color as needed
               ),
+            ),
 
               const SizedBox(height: 16),
               Row(
@@ -587,11 +587,11 @@ class _NewsFeedPageState extends State<NewsFeedPage> {
   }
 
   void _signOut() async {
-  try {
-    await FirebaseAuth.instance.signOut();
-    Navigator.of(context).popUntil((route) => route.isFirst);
-  } catch (e) {
-    print("Error signing out: $e");
-  }
+    try {
+      await FirebaseAuth.instance.signOut();
+      Navigator.of(context).popUntil((route) => route.isFirst);
+    } catch (e) {
+      print("Error signing out: $e");
+    }
   }
 }
