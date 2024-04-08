@@ -1,16 +1,10 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-<<<<<<< HEAD
-=======
-import 'package:health_anixi/State/new_postState.dart';
-import 'package:image_picker/image_picker.dart';
->>>>>>> 4778cbb55e4fa56a6e44335a4fd7ab01590bf1dd
 import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../pages/newfeed.dart';
-import 'package:health_anixi/Resources/save_media.dart';
 
 class NewPost extends StatefulWidget {
   const NewPost({Key? key}) : super(key: key);
@@ -32,19 +26,12 @@ class _NewPostState extends State<NewPost> {
     _thoughtsController = TextEditingController(); // Initialize TextEditingController
   }
 
-<<<<<<< HEAD
   Future<void> _pickImage() async {
-=======
-  // Function to allow the user to choose an image
-  Future<String> _pickImage() async {
->>>>>>> 4778cbb55e4fa56a6e44335a4fd7ab01590bf1dd
     final picker = ImagePicker();
     final pickedImage = await picker.pickImage(source: ImageSource.gallery);
     setState(() {
       _imageFile = pickedImage;
     });
-
-    return pickedImage!.path;
   }
 
  void _shareLocation() {
@@ -82,7 +69,6 @@ class _NewPostState extends State<NewPost> {
     return;
   }
 
-<<<<<<< HEAD
   // Check if location service is enabled
   bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
   if (!serviceEnabled) {
@@ -114,74 +100,6 @@ class _NewPostState extends State<NewPost> {
           borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(40),
             topRight: Radius.circular(40),
-=======
-  void _displayHiddenContainer(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      builder: (BuildContext context) {
-        return Container(
-          height: MediaQuery.of(context).size.height /
-              5, // Adjust the height as needed
-          decoration: BoxDecoration(
-            color: const Color.fromARGB(255, 217, 212, 212),
-            borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(40),
-              topRight: Radius.circular(40),
-            ),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.2),
-                spreadRadius: 1,
-                blurRadius: 6,
-                offset: const Offset(0, -3),
-              ),
-            ],
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  "Tag your friends",
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-              const Divider(
-                color: Colors.grey, // Change divider color to grey
-                thickness: 1.0,
-              ),
-              Expanded(
-                child: Align(
-                  alignment: Alignment.center,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      // Add your action here
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color.fromARGB(
-                          255, 74, 95, 86), // Change button text color to white
-                      shape: RoundedRectangleBorder(
-                        borderRadius:
-                            BorderRadius.zero, // Set border radius to zero
-                      ),
-                    ),
-                    child: const Text(
-                      'Done',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ],
->>>>>>> 4778cbb55e4fa56a6e44335a4fd7ab01590bf1dd
           ),
           boxShadow: [
             BoxShadow(
@@ -271,7 +189,6 @@ class _NewPostState extends State<NewPost> {
     );
   }
 
-<<<<<<< HEAD
   
 
    @override
@@ -280,10 +197,6 @@ class _NewPostState extends State<NewPost> {
     super.dispose();
   }
 
-=======
-  Color myColor = const Color.fromARGB(255, 74, 95, 86);
-  TextEditingController thoughts = TextEditingController();
->>>>>>> 4778cbb55e4fa56a6e44335a4fd7ab01590bf1dd
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -295,13 +208,8 @@ class _NewPostState extends State<NewPost> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-<<<<<<< HEAD
             TextField(
               controller: _thoughtsController,
-=======
-            TextFormField(
-              controller: thoughts,
->>>>>>> 4778cbb55e4fa56a6e44335a4fd7ab01590bf1dd
               decoration: InputDecoration(
                 hintText: 'Share your thoughts',
                 hintStyle: TextStyle(color: Colors.grey),
@@ -314,9 +222,7 @@ class _NewPostState extends State<NewPost> {
             ),
             SizedBox(height: 20),
             ElevatedButton(
-              onPressed: () async {
-                _pickImage();
-              },
+              onPressed: _pickImage,
               style: ElevatedButton.styleFrom(
                 padding: EdgeInsets.zero,
                 backgroundColor: const Color.fromARGB(255, 180, 178, 178),
@@ -324,7 +230,6 @@ class _NewPostState extends State<NewPost> {
                   borderRadius: BorderRadius.circular(10),
                 ),
               ),
-<<<<<<< HEAD
               child: Stack(
                 children: [
                   SizedBox(
@@ -378,34 +283,6 @@ class _NewPostState extends State<NewPost> {
                       ),
                     ),
                 ],
-=======
-              child: SizedBox(
-                width: 80,
-                height: 230,
-                child: _imageFile == null
-                    ? const Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.image,
-                            color: Color.fromARGB(255, 39, 38, 38),
-                          ),
-                          Text(
-                            'Upload a Photo',
-                            style: TextStyle(
-                              color: Color.fromARGB(255, 65, 63, 63),
-                              fontSize: 10,
-                            ),
-                          ),
-                        ],
-                      )
-                    : Image.file(
-                        File(_imageFile!.path),
-                        fit: BoxFit.cover,
-                        width: double.infinity,
-                        height: double.infinity,
-                      ),
->>>>>>> 4778cbb55e4fa56a6e44335a4fd7ab01590bf1dd
               ),
             ),
             SizedBox(height: 25),
@@ -450,7 +327,6 @@ class _NewPostState extends State<NewPost> {
               ),
             ),
             GestureDetector(
-<<<<<<< HEAD
               onTap: () {
                 // Handle dropdown visibility
               },
@@ -503,48 +379,6 @@ class _NewPostState extends State<NewPost> {
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
                   color: Colors.white,
-=======
-              onTap: () async {
-                try {
-                  if (_imageFile != null) {
-                   String url = await  new_postState().saveMedia(
-                        media: _imageFile!.path,
-                        mediaType: "Picture",
-                        extension: "png"
-                    );
-
-                    await new_postState().submitPost(
-                        thoughts: thoughts.text,
-                        location: "Ladysmith",
-                        media: url,
-                        mediaType: "Picture",
-                        extension: "png");
-                    setState(() {
-                      _imageFile = null;
-                    });
-                  }
-                }
-                catch(e){
-
-                }
-              },
-              child: Container(
-                height: 55,
-                width: 300,
-                decoration: BoxDecoration(
-                  color: myColor, // Background color
-                  borderRadius: BorderRadius.circular(0), // Rounded corners
-                ),
-                child: Center(
-                  child: Text(
-                    'Submit Post',
-                    style: TextStyle(
-                      color: Colors.white, // Text color
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
-                    ),
-                  ),
->>>>>>> 4778cbb55e4fa56a6e44335a4fd7ab01590bf1dd
                 ),
               ),
             ),
