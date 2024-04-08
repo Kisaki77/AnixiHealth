@@ -1,6 +1,8 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:health_anixi/Models/UserProfile.dart';
+import 'package:health_anixi/State/myProfileState.dart';
 import 'package:image_picker/image_picker.dart';
 
 class MyProfile extends StatefulWidget {
@@ -69,10 +71,47 @@ class _MyProfileState extends State<MyProfile> {
   String diseaseDropdownValue = 'Conditions';
   String anotherDropdownValue = 'Status';
   String city = '';
+  UserProfile? profile;
+  String name = "Loading";
+  String? surname;
+  String? cityDb;
+  String? email;
+  String? status;
+  String? gender;
+  String? province;
+  String? birthday;
+  String? userName;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    myProfileState().fetchProfileData().then((value){
+      setState(() {
+        profile=value;
+        name = value.name!;
+        surname =value.surname;
+        cityDb = value.city;
+        email = value.email;
+        status = value.status;
+        gender = value.gender;
+        province = value.province;
+        birthday = value.birthday;
+        userName = value.userName;
+      });
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return profile==null? Scaffold(
+        appBar:AppBar(
+          backgroundColor: Color.fromARGB(255, 254, 255, 255),
+        ),
+        body:Center(child: CircularProgressIndicator()
+        )
+    )
+    :Scaffold(
       appBar: AppBar(
         backgroundColor: Color.fromARGB(255, 254, 255, 255),
       ),
@@ -158,7 +197,7 @@ class _MyProfileState extends State<MyProfile> {
                             ),
                             const SizedBox(width: 5),
                             Text(
-                              'Luwe                              ',
+                             name!,
                               style: TextStyle(
                                   fontSize: 15,
                                   color: Color.fromARGB(255, 107, 165, 127)),
@@ -177,12 +216,12 @@ class _MyProfileState extends State<MyProfile> {
                               padding: const EdgeInsets.all(8),
                               child: const Icon(
                                 Icons.email,
-                                color: Color.fromARGB(255, 89, 134, 113),
+                                //color: Color.fromARGB(255, 89, 134, 113),
                               ),
                             ),
                             const SizedBox(width: 5),
                             Text(
-                              'Luwexaba@gmail.com',
+                              email!,
                               style: TextStyle(
                                   fontSize: 15,
                                   color: Color.fromARGB(255, 107, 165, 127)),
@@ -221,9 +260,9 @@ class _MyProfileState extends State<MyProfile> {
                             child: Container(
                               width: 300,
                               height: 50,
-                              child: const TextField(
+                              child: TextFormField(
                                 decoration: InputDecoration(
-                                  hintText: 'First Name',
+                                  hintText: profile!.name,
                                   hintStyle: TextStyle(
                                       color: Color.fromARGB(255, 57, 122, 103)),
                                   enabledBorder: OutlineInputBorder(
@@ -246,14 +285,14 @@ class _MyProfileState extends State<MyProfile> {
                           const SizedBox(
                             height: 10,
                           ),
-                          const Padding(
+                          Padding(
                             padding: EdgeInsets.all(10.0),
                             child: SizedBox(
                               width: 300,
                               height: 50,
-                              child: TextField(
+                              child: TextFormField(
                                 decoration: InputDecoration(
-                                  hintText: 'Last Name',
+                                  hintText: profile!.surname!,
                                   hintStyle: TextStyle(
                                       color: Color.fromARGB(255, 57, 122, 103)),
                                   enabledBorder: OutlineInputBorder(
@@ -287,7 +326,7 @@ class _MyProfileState extends State<MyProfile> {
                             child: SingleChildScrollView(
                               child: DropdownButtonHideUnderline(
                                 child: DropdownButton<String>(
-                                  value: genderDropdownValue,
+                                  value: profile!.gender!,
                                   icon: const Icon(Icons.arrow_drop_down,
                                       color: Color.fromARGB(255, 57, 122, 103)),
                                   dropdownColor: const Color(0xff4D6159),
@@ -315,14 +354,14 @@ class _MyProfileState extends State<MyProfile> {
                           SizedBox(
                             width: 300.0,
                             height: 50,
-                            child: TextField(
+                            child: TextFormField(
                               onChanged: (value) {
                                 setState(() {
                                   city = value;
                                 });
                               },
-                              decoration: const InputDecoration(
-                                hintText: 'Enter city',
+                              decoration:  InputDecoration(
+                                hintText: profile!.city!,
                                 border: OutlineInputBorder(
                                     borderRadius: BorderRadius.zero),
                                 focusedBorder: OutlineInputBorder(
@@ -354,7 +393,7 @@ class _MyProfileState extends State<MyProfile> {
                             child: SingleChildScrollView(
                               child: DropdownButtonHideUnderline(
                                 child: DropdownButton<String>(
-                                  value: diseaseDropdownValue,
+                                  value: profile!.condition!,
                                   icon: const Icon(Icons.arrow_drop_down,
                                       color: Colors.white),
                                   dropdownColor: Color.fromARGB(255, 255, 255, 255),
@@ -392,7 +431,7 @@ class _MyProfileState extends State<MyProfile> {
                             child: SingleChildScrollView(
                               child: DropdownButtonHideUnderline(
                                 child: DropdownButton<String>(
-                                  value: anotherDropdownValue,
+                                  value: profile!.status!,
                                   icon: const Icon(Icons.arrow_drop_down,
                                       color: Color.fromARGB(255, 71, 104, 86)),
                                   dropdownColor: const Color(0xff4D6159),

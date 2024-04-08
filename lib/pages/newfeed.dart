@@ -1,5 +1,11 @@
+import 'dart:io';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:health_anixi/Navigate/Wrapper.dart';
+import 'package:health_anixi/pages/PaymentScreen.dart';
+import 'package:health_anixi/pages/VideoUpload.dart';
 import '../menu_pages/group.dart';
 import '../menu_pages/invites.dart';
 import '../menu_pages/member.dart';
@@ -179,7 +185,52 @@ class _NewsFeedPageState extends State<NewsFeedPage> {
                   );
                 },
               ),
-              // Add the Sign Out ListTile here
+              ListTile(
+                leading: ClipOval(
+                  child: Image.asset(
+                    'assets/images/Survivor icon.png',
+                    width: 50,
+                    height: 50,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                title: const Text(
+                  'Videos',
+                  style: TextStyle(
+                    fontSize: 15,
+                    color: Colors.white,
+                  ),
+                ),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => VideoUpload()),
+                  );
+                },
+              ),
+              ListTile(
+                leading: ClipOval(
+                  child: Image.asset(
+                    'assets/images/Survivor icon.png',
+                    width: 50,
+                    height: 50,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                title: const Text(
+                  'Donate',
+                  style: TextStyle(
+                    fontSize: 15,
+                    color: Colors.white,
+                  ),
+                ),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => PaymentScreen()),
+                  );
+                },
+              ),
               ListTile(
                 leading: const Icon(
                   Icons.logout,
@@ -196,6 +247,7 @@ class _NewsFeedPageState extends State<NewsFeedPage> {
                   _signOut();
                 },
               ),
+              // Add the Sign Out ListTile here
             ],
           ),
         ),
@@ -307,7 +359,8 @@ class _NewsFeedPageState extends State<NewsFeedPage> {
                                           child: const Icon(
                                             Icons.expand_less,
                                             size: 40,
-                                            color: Colors.grey, // Adjust the color as needed
+                                            color: Colors
+                                                .grey, // Adjust the color as needed
                                           ),
                                         ),
                                       ),
@@ -316,7 +369,8 @@ class _NewsFeedPageState extends State<NewsFeedPage> {
                                   const Icon(
                                     Icons.notifications,
                                     size: 50,
-                                    color: Color.fromARGB(255, 129, 104, 27), // Adjust the color as needed
+                                    color: Color.fromARGB(255, 129, 104,
+                                        27), // Adjust the color as needed
                                   ),
                                 ],
                               ),
@@ -327,19 +381,47 @@ class _NewsFeedPageState extends State<NewsFeedPage> {
                     ],
                   ),
                 ),
-
                 Positioned(
                   top: MediaQuery.of(context).size.height / 10 + 20,
                   bottom: MediaQuery.of(context).size.height / 10 + 20,
                   left: 0,
                   right: 0,
-                  child: ListView(
-                    children: [
-                      _buildNewsCard(context, 'News 1', 0),
-                      _buildNewsCard(context, 'News 2', 1),
-                      _buildNewsCard(context, 'News 3', 2),
-                      _buildNewsCard(context, 'News 4', 3),
-                    ],
+                  child: StreamBuilder(
+                    stream: FirebaseFirestore.instance
+                        .collection("Posts")
+                        .snapshots(),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return CircularProgressIndicator();
+                      }
+                      final mediaList = snapshot.data?.docs.reversed.toList();
+                      return ListView.builder(
+                        itemCount: mediaList?.length,
+                        itemBuilder: (context, index) {
+                          final media = mediaList![index];
+                          //final videoController = VideoPlayerController.network(video["Url"]);
+                          //_controllers.add(videoController);
+                          // return Card(
+                          //   child: Padding(
+                          //     padding: const EdgeInsets.all(8.0),
+                          //     child: VideoListItem(
+                          //       videoController: videoController,
+                          //       videoName: video["Name"],
+                          //     ),
+                          //   ),
+                          // );
+                          return _buildNewsCard(context, media["Thoughts"], index,media["Media"]);
+                        },
+                      );
+                    },
+                    // child: ListView(
+                    //   children: [
+                    //     _buildNewsCard(context, 'News 1', 0),
+                    //_buildNewsCard(context, 'News 2', 1),
+                    //     _buildNewsCard(context, 'News 3', 2),
+                    //     _buildNewsCard(context, 'News 4', 3),
+                    //   ],
+                    // ),
                   ),
                 ),
               ],
@@ -350,13 +432,126 @@ class _NewsFeedPageState extends State<NewsFeedPage> {
     );
   }
 
-  Widget _buildNewsCard(BuildContext context, String title, int index) {
+  Widget _buildNewsCard(BuildContext context, String title, int index,String url) {
     return Card(
+      color: Colors.grey[200],
       child: Column(
         children: [
           ListTile(
             title: Text(title),
           ),
+          Container(
+            color: Colors.white,
+            height: 200,
+            width: 400,
+            child: Card(
+              color: Colors.white,
+              shadowColor: Colors.white,
+              surfaceTintColor: Colors.white,
+              child: Image.network(
+                url,
+              ),
+            ),
+          ),
+
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              GestureDetector(
+                onTap: () {
+                  setState(() {
+                    isLikedList[index] = !isLikedList[index];
+                    if (isLikedList[index]) {
+                      likeCountList[index]++;
+                    } else {
+                      //likeCountList[index]--;
+                    }
+                  });
+                },
+                child: Row(
+                  children: [
+                    Image.asset(
+                      'assets/images/hearty.png',
+                      width: 20,
+                      height: 20,
+                      color: isLikedList[index] ? Colors.red : null,
+                    ),
+                    const SizedBox(width: 4),
+                    Text(
+                      ' ${likeCountList[index]} Reacts',
+                      style: const TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              TextButton(
+                onPressed: () {
+                  _showCommentDialog(context, index);
+                },
+                child: const Text(
+                  'Comment',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              TextButton(
+                onPressed: () {
+                  _handleShareAction();
+                },
+                child: const Text(
+                  'Share',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 10),
+          if (comments[index].isNotEmpty)
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: Text(
+                'Comment: ${comments[index]}',
+                style: const TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildNewsCardVideo(BuildContext context, String title, int index,String url) {
+    return Card(
+      color: Colors.grey[200],
+      child: Column(
+        children: [
+          ListTile(
+            title: Text(title),
+          ),
+          Container(
+            color: Colors.white,
+            height: 200,
+            width: 400,
+            child: Card(
+              color: Colors.white,
+              shadowColor: Colors.white,
+              surfaceTintColor: Colors.white,
+              child: Image.network(
+                url,
+              ),
+            ),
+          ),
+
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
@@ -506,8 +701,11 @@ class _NewsFeedPageState extends State<NewsFeedPage> {
                 size: 40,
                 color: Colors.grey, // Adjust the color as needed
               ),
+<<<<<<< HEAD
             ),
 
+=======
+>>>>>>> 4778cbb55e4fa56a6e44335a4fd7ab01590bf1dd
               const SizedBox(height: 16),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -589,7 +787,13 @@ class _NewsFeedPageState extends State<NewsFeedPage> {
   void _signOut() async {
     try {
       await FirebaseAuth.instance.signOut();
+<<<<<<< HEAD
       Navigator.of(context).popUntil((route) => route.isFirst);
+=======
+      Navigator.push(context, MaterialPageRoute(builder: (context) {
+        return Wrapper();
+      }));
+>>>>>>> 4778cbb55e4fa56a6e44335a4fd7ab01590bf1dd
     } catch (e) {
       print("Error signing out: $e");
     }

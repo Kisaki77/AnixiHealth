@@ -1,8 +1,10 @@
 
 import 'package:health_anixi/State/signupState.dart';
 import 'package:health_anixi/firebase_auth/firebase_auth_services.dart';
+import 'package:health_anixi/pages/VideoUpload.dart';
 import 'package:health_anixi/pages/forgot.dart';
 import 'package:health_anixi/pages/guide.dart';
+import 'package:health_anixi/pages/newfeed.dart';
 import 'package:health_anixi/pages/signup.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
@@ -147,7 +149,10 @@ class _MyLoginState extends State<myLogin> {
                             dynamic loggedIn = await loginState_v.loginInClicked(context);
                             print(loginState_v.error);
                             if(loggedIn !=null){
-                              Navigator.pushNamed(context, "/home");
+                              //Navigator.pushNamed(context, "/home");
+                              Navigator.push(context, MaterialPageRoute(builder: (context){
+                                return NewsFeedPage();
+                              }));
                             }
                             else{
                               return showDialog(
