@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 import '../pages/newfeed.dart';
 
 class Friends extends StatefulWidget {
@@ -94,16 +93,19 @@ class _FriendsState extends State<Friends> {
          const SizedBox(height: 10),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 25.0),
-            child: TextFormField(
-              decoration: const InputDecoration(
-                hintText: 'FIND FRIENDS',
-                border: OutlineInputBorder(),
-                contentPadding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-                suffixIcon: Icon(Icons.search),
-                 // Move the search icon to the right side
-              ),
-              
+             child: TextFormField(
+          decoration: const InputDecoration(
+            hintText: 'FIND FRIENDS',
+            border: OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.grey), // Set border color to grey
             ),
+            focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.grey), // Set border color to grey when focused
+            ),
+            contentPadding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+            suffixIcon: Icon(Icons.search, color: Colors.grey), // Set search icon color to grey
+          ),
+        ),
           ),
 
 
