@@ -225,10 +225,10 @@ class _NewsFeedPageState extends State<NewsFeedPage> {
                   ),
                 ),
                 onTap: () {
-                  Navigator.push(
+                 /* Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => PaymentScreen()),
-                  );
+                  );*/
                 },
               ),
               ListTile(
@@ -701,11 +701,10 @@ class _NewsFeedPageState extends State<NewsFeedPage> {
                 size: 40,
                 color: Colors.grey, // Adjust the color as needed
               ),
-<<<<<<< HEAD
+
             ),
 
-=======
->>>>>>> 4778cbb55e4fa56a6e44335a4fd7ab01590bf1dd
+
               const SizedBox(height: 16),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -787,13 +786,13 @@ class _NewsFeedPageState extends State<NewsFeedPage> {
   void _signOut() async {
     try {
       await FirebaseAuth.instance.signOut();
-<<<<<<< HEAD
+
       Navigator.of(context).popUntil((route) => route.isFirst);
-=======
+
       Navigator.push(context, MaterialPageRoute(builder: (context) {
         return Wrapper();
       }));
->>>>>>> 4778cbb55e4fa56a6e44335a4fd7ab01590bf1dd
+
     } catch (e) {
       print("Error signing out: $e");
     }
