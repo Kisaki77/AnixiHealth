@@ -1,8 +1,7 @@
-import 'package:contacts_service/contacts_service.dart';
 import 'package:flutter/material.dart';
+import 'package:contacts_service/contacts_service.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:url_launcher/url_launcher.dart';
-
 import '../pages/newfeed.dart';
 
 class Myinvites extends StatelessWidget {
@@ -93,7 +92,7 @@ class _MyInvitesBodyState extends State<MyInvitesBody> {
     String deepLink = 'https://play.google.com/store/apps/details?id=com.app.anixihealth&hl=en&gl=US&pli=1';
 
     // Construct the WhatsApp message with the deep link
-    String message = 'Hey! Check Anixi Health App : $deepLink';
+    String message = 'Hey! Check Anixi Health App: $deepLink';
 
     // Construct the WhatsApp URL
     String url = 'https://wa.me/$phoneNumber?text=${Uri.encodeComponent(message)}';
@@ -139,11 +138,14 @@ class _MyInvitesBodyState extends State<MyInvitesBody> {
                   return ListTile(
                     title: Text(contact.displayName ?? ''),
                     subtitle: Text(phone ?? ''),
-                    onTap: () {
-                      if (phone != null) {
-                        _sendWhatsAppMessage(phone);
-                      }
-                    },
+                    trailing: IconButton(
+                      icon: Icon(Icons.send),
+                      onPressed: () {
+                        if (phone != null) {
+                          _sendWhatsAppMessage(phone);
+                        }
+                      },
+                    ),
                   );
                 },
               ),
