@@ -6,7 +6,7 @@ class new_postState{
   new_postState();
 
 
-  submitPost({required String thoughts,required String location,required String media,required String mediaType,required String extension}) async{
+  submitPost({required String thoughts,required String location,required String media,required String mediaType,required String extension, String? thumbnail}) async{
     String uid = await FirebaseAuth.instance.currentUser!.uid;
     
     DocumentReference ref = FirebaseFirestore.instance.collection("Users").doc(uid);
@@ -25,12 +25,17 @@ class new_postState{
       "UserPhoto": "Blank photo",
       "Hearts":0,
       "Comments":null,
-      "Shares":0
+      "Shares":0,
+      "Thumbnail":thumbnail
     });
   }
 
   //Saves Media to Firebase Storage
-  Future<String> saveMedia({required String media,required String mediaType,required String extension}) async{
+  Future<String> saveMedia({
+    required String media,
+    required String mediaType,
+    required String extension
+  }) async{
     return await StoreData().uploadMedia(
         videoUrl: media,
         mediaType: mediaType,

@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:health_anixi/State/new_postState.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:video_player/video_player.dart';
+import 'package:video_thumbnail/video_thumbnail.dart';
 import '../pages/newfeed.dart';
 import 'package:health_anixi/Resources/save_media.dart';
 
@@ -15,7 +17,9 @@ class NewPost extends StatefulWidget {
 
 class _NewPostState extends State<NewPost> {
   XFile? _imageFile; // Variable to store the chosen image file
+  XFile? _videoFile;
   bool _showTagFriendsContainer = false;
+  VideoPlayerController? videoController;
 
   // Function to allow the user to choose an image
   Future<String> _pickImage() async {
@@ -27,6 +31,20 @@ class _NewPostState extends State<NewPost> {
 
     return pickedImage!.path;
   }
+
+  // Function to allow the user to choose a video
+  Future<String> _pickVideo() async {
+    final picker = ImagePicker();
+    final pickedVideo = await picker.pickVideo(source: ImageSource.gallery);
+    setState(() {
+      _videoFile = pickedVideo;
+    });
+
+    return pickedVideo!.path;
+  }
+
+
+
 
   void _shareLocation() {
     showDialog(
@@ -156,6 +174,13 @@ class _NewPostState extends State<NewPost> {
 
   Color myColor = const Color.fromARGB(255, 74, 95, 86);
   TextEditingController thoughts = TextEditingController();
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    videoController?.dispose();
+    super.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -181,15 +206,15 @@ class _NewPostState extends State<NewPost> {
           },
           child: Image.asset(
             'assets/images/back.png', // Replace 'assets/images/back.png' with your actual image path
-            width: 40, // Adjust width as needed
+            width: 20, // Adjust width as needed
             height: 40, // Adjust height as needed
           ),
         ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
+        child: ListView(
+          //crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             TextFormField(
               controller: thoughts,
@@ -204,6 +229,71 @@ class _NewPostState extends State<NewPost> {
               maxLines: null,
             ),
             const SizedBox(height: 20),
+            GestureDetector(
+              onTap: (){
+                showDialog(
+                    context: context,
+                    builder: (BuildContext context){
+                      return AlertDialog(
+                          title:Center(
+                            child: Text(
+                                'What do you want to upload?',
+                                style:TextStyle(
+                                  color: myColor,
+                                  fontWeight: FontWeight.bold,
+
+                                )
+                            ),
+                          ),
+                          // content: Text(
+                          //   "Please choose Media Type",
+                          //   style: TextStyle(
+                          //       color: myColor
+                          //   ),
+                          // ),
+                          actions:<Widget>[
+                            TextButton(
+                                onPressed:() async {
+                                  await _pickImage();
+                                  Navigator.of(context).pop();//
+                                },
+                                child:Center(
+                                  child: Text(
+                                      "Image",
+                                      style:TextStyle(
+                                        fontSize:20,
+                                          color: Colors.black,
+                                          //fontWeight: FontWeight.bold
+                                      )
+                                  ),
+                                )
+                            ),
+                            TextButton(
+                                onPressed:()async{
+                                 await _pickVideo();
+                                  _intializeVideoPlayer();
+                                  Navigator.of(context).pop();
+
+                                },
+                                child:Center(
+                                  child: Text(
+                                      "Video",
+                                      style:TextStyle(
+                                        fontSize:20,
+                                          color: Colors.black,
+                                          //fontWeight: FontWeight.bold
+                                      )
+                                  ),
+                                )
+                            )
+                          ]
+
+                      );
+                    }
+                );
+              },
+              child: Text("Upload Media"),
+            ),
             ElevatedButton(
               onPressed: () async {
                 _pickImage();
@@ -216,9 +306,9 @@ class _NewPostState extends State<NewPost> {
                 ),
               ),
               child: SizedBox(
-                width: 80,
+                width: 150,
                 height: 230,
-                child: _imageFile == null
+                child: _imageFile== null && _videoFile==null
                     ? const Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -227,7 +317,7 @@ class _NewPostState extends State<NewPost> {
                             color: Color.fromARGB(255, 39, 38, 38),
                           ),
                           Text(
-                            'Upload a Photo',
+                            'Upload Media',
                             style: TextStyle(
                               color: Color.fromARGB(255, 65, 63, 63),
                               fontSize: 10,
@@ -235,14 +325,20 @@ class _NewPostState extends State<NewPost> {
                           ),
                         ],
                       )
-                    : Image.file(
+                    : _videoFile !=null?
+                _videoPreviewWidget():
+
+                Image.file(
                         File(_imageFile!.path),
                         fit: BoxFit.cover,
                         width: double.infinity,
                         height: double.infinity,
-                      ),
+                      )
+                ,
               ),
             ),
+
+
             const SizedBox(height: 25),
             const TextField(
               decoration: InputDecoration(
@@ -309,9 +405,44 @@ class _NewPostState extends State<NewPost> {
                         location: "Ladysmith",
                         media: url,
                         mediaType: "Picture",
-                        extension: "png");
+                        extension: "png",
+                    );
                     setState(() {
                       _imageFile = null;
+                    });
+                  }
+                  else if (_videoFile != null) {
+                    String url = await  new_postState().saveMedia(
+                        media: _videoFile!.path,
+                        mediaType: "Video",
+                        extension: "mp4"
+                    );
+
+
+
+                    // Creates video Thumbnail
+                    String? thumbnail = await VideoThumbnail.thumbnailFile(
+                      video: url,
+                    );
+
+                    // Saves thumbnail to Firebase storage
+                    String? thumbnailData = await  new_postState().saveMedia(
+                        media: thumbnail!,
+                        mediaType: "Picture",
+                        extension: "png"
+                    );
+
+
+                    await new_postState().submitPost(
+                        thoughts: thoughts.text,
+                        location: "Ladysmith",
+                        media: url,
+                        mediaType: "Video",
+                        extension: "mp4",
+                      thumbnail: thumbnailData
+                    );
+                    setState(() {
+                      _videoFile = null;
                     });
                   }
                 }
@@ -343,4 +474,42 @@ class _NewPostState extends State<NewPost> {
       ),
     );
   }
+
+  void _intializeVideoPlayer(){
+
+    videoController = VideoPlayerController.file(
+        File(_videoFile!.path))
+      ..initialize().then((value){
+        setState(() {
+          videoController!.play();
+        });
+      });
+
+  }
+
+  Widget _videoPreviewWidget(){
+    if(videoController !=null){
+      return Column(
+        children: [
+          AspectRatio(
+              aspectRatio: videoController!.value.aspectRatio,
+              child:VideoPlayer(videoController!)
+          ),SizedBox(
+            height: 10,
+          ),Padding(
+            padding: const EdgeInsets.all(20),
+
+          ),
+          SizedBox(
+            height: 20,
+          )
+        ],
+      );
+    }
+    else{
+      return const CircularProgressIndicator();
+    }
+
+  }
 }
+

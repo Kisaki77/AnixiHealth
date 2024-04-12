@@ -4,8 +4,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:health_anixi/Navigate/Wrapper.dart';
+import 'package:health_anixi/State/newfeedState.dart';
 import 'package:health_anixi/pages/PaymentScreen.dart';
+import 'package:health_anixi/pages/VideoLists.dart';
 import 'package:health_anixi/pages/VideoUpload.dart';
+import 'package:video_player/video_player.dart';
 import '../menu_pages/group.dart';
 import '../menu_pages/invites.dart';
 import '../menu_pages/member.dart';
@@ -23,6 +26,16 @@ class _NewsFeedPageState extends State<NewsFeedPage> {
   List<bool> isLikedList = List.generate(4, (_) => false);
   List<int> likeCountList = List.generate(4, (_) => 0);
   List<List<String>> comments = List.generate(4, (_) => []);
+  late List<VideoPlayerController> _controllers;
+
+  @override
+  void initState() {
+
+    _controllers = [];
+    super.initState();
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -312,73 +325,79 @@ class _NewsFeedPageState extends State<NewsFeedPage> {
                   left: 0,
                   right: 0,
                   height: MediaQuery.of(context).size.height / 10,
-                  child: Stack(
-                    children: [
-                      ClipRRect(
-                        borderRadius: const BorderRadius.only(
-                          topLeft: Radius.circular(40),
-                          topRight: Radius.circular(40),
-                        ),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: const Color.fromARGB(255, 217, 212, 212),
-                            borderRadius: const BorderRadius.only(
-                              topLeft: Radius.circular(40),
-                              topRight: Radius.circular(40),
-                              bottomLeft: Radius.zero,
-                              bottomRight: Radius.zero,
-                            ),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withOpacity(0.2),
-                                spreadRadius: 1,
-                                blurRadius: 6,
-                                offset: const Offset(0, -3),
-                              ),
-                            ],
+                  child: GestureDetector(
+                      onTap: () {
+                        _displayHiddenContainer(context);
+                      },
+                    child: Stack(
+                      children: [
+                        ClipRRect(
+                          borderRadius: const BorderRadius.only(
+                            topLeft: Radius.circular(40),
+                            topRight: Radius.circular(40),
                           ),
-                          child: Column(
-                            children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Stack(
-                                    alignment: Alignment.center,
-                                    children: [
-                                      Image.asset(
-                                        'assets/images/flowerblack.png',
-                                        width: 100,
-                                        height: 70,
-                                      ),
-                                      Positioned(
-                                        top: -15,
-                                        child: GestureDetector(
-                                          onTap: () {
-                                            _displayHiddenContainer(context);
-                                          },
-                                          child: const Icon(
-                                            Icons.expand_less,
-                                            size: 40,
-                                            color: Colors
-                                                .grey, // Adjust the color as needed
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: const Color.fromARGB(255, 217, 212, 212),
+                              borderRadius: const BorderRadius.only(
+                                topLeft: Radius.circular(40),
+                                topRight: Radius.circular(40),
+                                bottomLeft: Radius.zero,
+                                bottomRight: Radius.zero,
+                              ),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.2),
+                                  spreadRadius: 1,
+                                  blurRadius: 6,
+                                  offset: const Offset(0, -3),
+                                ),
+                              ],
+                            ),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Stack(
+                                      alignment: Alignment.center,
+                                      children: [
+                                        Image.asset(
+                                          'assets/images/flowerblack.png',
+                                          width: 100,
+                                          height: 70,
+                                        ),
+                                        Positioned(
+                                          top: -15,
+                                          child: GestureDetector(
+                                            onTap: () {
+                                              _displayHiddenContainer(context);
+                                            },
+                                            child: const Icon(
+                                              Icons.expand_less,
+                                              size: 40,
+                                              color: Colors
+                                                  .grey, // Adjust the color as needed
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                    ],
-                                  ),
-                                  const Icon(
-                                    Icons.notifications,
-                                    size: 50,
-                                    color: Color.fromARGB(255, 129, 104,
-                                        27), // Adjust the color as needed
-                                  ),
-                                ],
-                              ),
-                            ],
+                                      ],
+                                    ),
+                                    const Icon(
+                                      Icons.notifications,
+                                      size: 50,
+                                      color: Color.fromARGB(255, 129, 104,
+                                          27), // Adjust the color as needed
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
                 Positioned(
@@ -399,6 +418,16 @@ class _NewsFeedPageState extends State<NewsFeedPage> {
                         itemCount: mediaList?.length,
                         itemBuilder: (context, index) {
                           final media = mediaList![index];
+                          if(media["MediaType"] == "Picture"){
+                            return _buildNewsCard(context, media["Thoughts"], index,media["Media"],media.id,media["Hearts"]);
+                          }
+                          else{
+                            final videoController = VideoPlayerController.network(media["Media"]);
+                            _controllers.add(videoController);
+                            return _buildVideoCard(context, media["Thoughts"], index,media["Media"],media.id,media["Hearts"],media["Thumbnail"]);
+
+                          }
+
                           //final videoController = VideoPlayerController.network(video["Url"]);
                           //_controllers.add(videoController);
                           // return Card(
@@ -410,7 +439,7 @@ class _NewsFeedPageState extends State<NewsFeedPage> {
                           //     ),
                           //   ),
                           // );
-                          return _buildNewsCard(context, media["Thoughts"], index,media["Media"]);
+                          return _buildNewsCard(context, media["Thoughts"], index,media["Media"],media.id,media["Hearts"]);
                         },
                       );
                     },
@@ -432,7 +461,7 @@ class _NewsFeedPageState extends State<NewsFeedPage> {
     );
   }
 
-  Widget _buildNewsCard(BuildContext context, String title, int index,String url) {
+  Widget _buildNewsCard(BuildContext context, String title, int index,String url, String docId,int? hearts ) {
     return Card(
       color: Colors.grey[200],
       child: Column(
@@ -458,15 +487,9 @@ class _NewsFeedPageState extends State<NewsFeedPage> {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               GestureDetector(
-                onTap: () {
-                  setState(() {
-                    isLikedList[index] = !isLikedList[index];
-                    if (isLikedList[index]) {
-                      likeCountList[index]++;
-                    } else {
-                      //likeCountList[index]--;
-                    }
-                  });
+                onTap: () async{
+                 await newfeedState().heartPost(docId: docId);
+
                 },
                 child: Row(
                   children: [
@@ -478,7 +501,7 @@ class _NewsFeedPageState extends State<NewsFeedPage> {
                     ),
                     const SizedBox(width: 4),
                     Text(
-                      ' ${likeCountList[index]} Reacts',
+                      ' ${hearts ?? 0} Reacts',
                       style: const TextStyle(
                         color: Colors.black,
                         fontWeight: FontWeight.bold,
@@ -530,7 +553,7 @@ class _NewsFeedPageState extends State<NewsFeedPage> {
     );
   }
 
-  Widget _buildNewsCardVideo(BuildContext context, String title, int index,String url) {
+  Widget _buildVideoCard(BuildContext context, String title, int index, String url, String docId, int? hearts, String thumbnail) {
     return Card(
       color: Colors.grey[200],
       child: Column(
@@ -538,95 +561,119 @@ class _NewsFeedPageState extends State<NewsFeedPage> {
           ListTile(
             title: Text(title),
           ),
-          Container(
-            color: Colors.white,
-            height: 200,
-            width: 400,
-            child: Card(
+          GestureDetector(
+            onTap: () {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  final videoController = VideoPlayerController.network(url);
+                  videoController.initialize().then((_) {
+                    // Ensure the first frame is shown after the video is initialized
+                    videoController.play();
+                  });
+
+                  return AlertDialog(
+                    title: Center(
+                      child: Text(
+                        'Video',
+                        style: TextStyle(
+                          color: Colors.red,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    content: VideoListItem(
+                      videoController: videoController,
+                      videoName: title,
+                    ),
+                    actions: <Widget>[
+                      TextButton(
+                        onPressed: () {
+                          // Stop and dispose of the VideoPlayerController when the dialog is closed
+                          videoController.pause();
+                          videoController.dispose();
+                          Navigator.of(context).pop();
+                        },
+                        child: Center(
+                          child: Text(
+                            "Ok",
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      )
+                    ],
+                  );
+                },
+              );
+            },
+            child: Container(
               color: Colors.white,
-              shadowColor: Colors.white,
-              surfaceTintColor: Colors.white,
-              child: Image.network(
-                url,
+              height: 200,
+              width: 400,
+              child: Stack(
+                children: [
+                  // Video thumbnail initially
+                  Center(
+                    child: Container(
+                      width: 200,
+                      height:200,
+                      child: Image.network(
+                        thumbnail,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+    Center(
+      child: Image.asset(
+      'assets/images/play.png',
+      width: 50,
+      height: 50,
+      color: isLikedList[index] ? Colors.red : null,
+      ),
+    ),
+                  // Play icon overlay
+                  // Positioned.fill(
+                  //   child: Center(
+                  //     child: Icon(
+                  //       Icons.play_circle_fill,
+                  //       size: 50,
+                  //       color: Colors.white,
+                  //     ),
+                  //   ),
+                  // ),
+                ],
               ),
+
             ),
           ),
-
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              GestureDetector(
-                onTap: () {
-                  setState(() {
-                    isLikedList[index] = !isLikedList[index];
-                    if (isLikedList[index]) {
-                      likeCountList[index]++;
-                    } else {
-                      //likeCountList[index]--;
-                    }
-                  });
-                },
-                child: Row(
-                  children: [
-                    Image.asset(
-                      'assets/images/hearty.png',
-                      width: 20,
-                      height: 20,
-                      color: isLikedList[index] ? Colors.red : null,
-                    ),
-                    const SizedBox(width: 4),
-                    Text(
-                      ' ${likeCountList[index]} Reacts',
-                      style: const TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              TextButton(
-                onPressed: () {
-                  _showCommentDialog(context, index);
-                },
-                child: const Text(
-                  'Comment',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-              TextButton(
-                onPressed: () {
-                  _handleShareAction();
-                },
-                child: const Text(
-                  'Share',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
+              // Buttons and other UI elements
             ],
           ),
-          const SizedBox(height: 10),
-          if (comments[index].isNotEmpty)
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: Text(
-                'Comment: ${comments[index]}',
-                style: const TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
+          // Comments section and other UI elements
         ],
       ),
     );
   }
+
+
+  String getVideoThumbnailUrl(String videoUrl) {
+    // Implement a function to extract the video thumbnail URL from the video URL
+    // For example, if the video URL is 'https://example.com/video.mp4',
+    // you can return 'https://example.com/video_thumbnail.jpg'
+    // Replace this implementation with your actual logic
+    return videoUrl.replaceAll('.mp4', '_thumbnail.jpg');
+  }
+
+
+
+
+
 
   void _showCommentDialog(BuildContext context, int index) {
     showDialog(

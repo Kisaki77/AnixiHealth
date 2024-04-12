@@ -31,8 +31,8 @@ class _WrapperState extends State<Wrapper> {
       }
 
       else{
-          return VideoUpload();
-        //return NewsFeedPage();
+
+        return NewsFeedPage();
       }
     }catch (e) {
       return MyScreen();

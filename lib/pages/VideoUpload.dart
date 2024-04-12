@@ -163,14 +163,6 @@ class _VideoUploadState extends State<VideoUpload> {
           SizedBox(
             height: 20,
           )
-          // ElevatedButton(
-          //     onPressed: () async{
-          // downloadUrl = await StoreData().uploadVideo(_videoUrl!);
-          // await StoreData().saveVideoData(downloadUrl!);
-          // setState(() {
-          // _videoUrl = null;// to clear video
-          // });
-          // }, child: const Text("upload"))
         ],
       );
     }
